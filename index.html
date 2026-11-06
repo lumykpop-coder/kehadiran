@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kehadiran</title>
+<style>
+:root{--bg:#f2f2f7;--card:#fff;--tx:#111;--mu:#8e8e93;--ln:#e5e5ea;--ac:#007aff;--rd:#ff3b30;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#000;--card:#1c1c1e;--tx:#fff;--mu:#98989f;--ln:#38383a;--ac:#0a84ff}}
+:root[data-theme="dark"]{--bg:#000;--card:#1c1c1e;--tx:#fff;--mu:#98989f;--ln:#38383a;--ac:#0a84ff}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:32px;margin:8px 0 2px;letter-spacing:-.5px}
+.sub{color:var(--mu);font-size:14px;margin-bottom:14px}
+.seg{display:flex;background:rgba(120,120,128,.16);border-radius:9px;padding:2px;gap:2px}
+.seg button{flex:1;border:0;background:none;color:var(--tx);padding:7px 4px;border-radius:7px;font:inherit;font-size:14px;cursor:pointer}
+.seg button.on{background:var(--card);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.card{background:var(--card);border-radius:14px;padding:14px;margin:14px 0}
+.seg.wrap{flex-wrap:wrap}.seg.wrap button{flex:1 0 30%}
+label{display:block;font-size:13px;color:var(--mu);margin:10px 0 5px;text-transform:uppercase;letter-spacing:.3px}
+input[type=text],input[type=password],select,textarea{width:100%;border:0;background:rgba(120,120,128,.12);color:var(--tx);border-radius:10px;padding:12px;font:inherit}
+.btn{width:100%;border:0;border-radius:12px;background:var(--ac);color:#fff;font:inherit;font-weight:600;padding:14px;margin-top:16px;cursor:pointer}
+.btn:disabled{opacity:.5}.btn.s{width:auto;padding:7px 12px;margin:0;font-size:13px;font-weight:500}
+.btn.g{background:rgba(120,120,128,.16);color:var(--ac)}
+textarea{min-height:80px;resize:vertical}.err{color:var(--rd);font-size:14px;margin-top:10px}
+.hint{color:var(--mu);font-size:12px;margin-top:6px}
+.ok{text-align:center}.ok .ck{width:52px;height:52px;border-radius:50%;background:#34c759;color:#fff;font-size:30px;line-height:52px;margin:0 auto 8px}
+.ok b{font-size:18px}.ok div{color:var(--mu);font-size:14px;margin-top:3px}
+.bd{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600;color:#fff}
+.Hadir{background:#34c759}.Izin{background:#007aff}.Sakit{background:#ff9500}.Praktikum{background:#af52de}.Responsi{background:#30b0c7}.MataKuliah{background:#5856d6}.Quiz{background:#ff2d55}.Sholat{background:#00a67e}.Ishoma{background:#a2845e}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}.chip{flex:0 0 auto;background:var(--card);border-radius:12px;padding:8px 12px;text-align:center;min-width:70px}
+.chip b{display:block;font-size:20px}.chip span{font-size:12px;color:var(--mu)}
+.hh{display:flex;justify-content:space-between;align-items:center;margin:18px 4px 6px}.hh b{font-size:15px}.hh small{color:var(--mu);margin-left:6px}
+.row{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--ln);font-size:14px}.row:first-child{border-top:0}
+.row .n{font-weight:500}.row .m{color:var(--mu);font-size:12px;margin-top:2px}.row a{color:var(--ac)}
+.row>div:last-child{text-align:right;flex:0 0 auto}
+.emp{color:var(--mu);text-align:center;padding:30px 0}
+.top{display:flex;gap:8px;align-items:center;margin-top:12px}.top select{flex:1}
+.dh{font-size:20px;font-weight:700;margin:22px 4px 0}.dh small{color:var(--mu);font-weight:400;font-size:14px;margin-left:6px}.vf video{width:100%;border-radius:12px;margin-bottom:8px;transform:scaleX(-1);background:#000}.vf img{width:100%;border-radius:12px;margin-bottom:8px}</style></head><body><div class="w">
+<h1>Kehadiran</h1><div class="sub" id="clock"></div>
+<div id="pa">
+<div class="card">
+<label>NPM</label><input type="text" id="fn" inputmode="numeric" placeholder="2615041001" autocomplete="off">
+<label>Nama lengkap</label><input type="text" id="fm" placeholder="Isi salah satu: NPM atau nama" autocomplete="off">
+<div class="hint">Isi salah satu saja. Nama tidak peka huruf besar/kecil, tetapi harus lengkap.</div>
+<label>Status</label><div class="seg wrap" id="st"></div>
+<div id="bw" style="display:none"><label>Keterangan / alasan</label><textarea id="al" placeholder="Tulis alasan izin atau keterangan sakit"></textarea><label>Bukti (opsional: foto, video, PDF, dll.)</label><input type="file" id="bf"><div class="hint">Maks. 20 MB per file.</div></div>
+<label>Verifikasi kehadiran</label>
+<div class="vf"><video id="vd" autoplay playsinline muted style="display:none"></video><img id="sf" alt="" style="display:none"><canvas id="cv" style="display:none"></canvas></div>
+<div class="seg"><button type="button" id="bc">Ambil foto</button><button type="button" id="bl">Ambil lokasi</button></div>
+<div class="hint" id="vs">Foto: belum · Lokasi: belum (wajib sebelum mengirim)</div>
+<div class="err" id="er"></div>
+<button class="btn" id="go">Kirim kehadiran</button>
+<div class="hint" id="win"></div>
+</div>
+<div class="card ok" id="res" style="display:none"></div>
+</div>
+
+</div>
+<script>
+const LIST=`2615041001	AISHA RAHMA HUSNULKHOTIMAH
+2615041002	ANISA AULIA DWI RAMADHAN
+2615041003	DENA SULISTRIYANA
+2615041004	EKA AULIA PUTRI
+2615041005	FADIA TALITA SAKHI
+2615041006	FRISKA TRIHAPSARI
+2615041007	KAYLA SAVIRA
+2615041008	KEISHA RAJNI RAMADHINI
+2615041009	MUHAMMAD RIZKI ALFIAN
+2615041010	NADIRA MARSHA QIANITHA
+2615041011	NAJWA ZAHRA NAURAH SALSABILA
+2615041012	NAYLA ALIFA
+2615041013	NEZI
+2615041014	SYAVIRA NIRMA DEWI
+2615041015	TANIA NABILA SAFITRI
+2615041016	ADDINA SHAHRAZAD
+2615041017	ANNISA SEPTIANI
+2615041018	AULIA NUR SAHARA ANGGRAINI
+2615041019	CHELSYLA ANISSA TRI GANGGA
+2615041020	DESTINY NASSI'A SYAMSU
+2615041021	ERSA DEA ANGGREILI
+2615041022	FADIYAH AZZAHRAH HENRICO
+2615041023	NOVAN ARIWIJAYA
+2615041024	NYAYU KHALISYA RAMADHANI
+2615041025	RAHMA AGIL SUSANTI
+2615041026	RESKYTA CAHYANI
+2615041027	SULTHAN FAUZAN HERENDAR
+2615041028	TANIA KESYA WULANDARI
+2615041029	XENA DELFIORA WYJAYA
+2615041030	ZEFANYA ANGELINA
+2615041031	ARANTRIZQI RATU ALIKA
+2615041032	DISTY ALYA WIJAYA
+2615041033	FAHRIZA AZZAHRA
+2615041034	FEHIMA JELILA KAIRA DAIMA
+2615041035	JULIA FAUZIANI CHANDRA
+2615041036	NABILA ANDRIYANI
+2615041037	VALSA MEGA TASYA
+2615041038	KEYSA MAY YUSI
+2615041039	AUNATULLAH UZHMA
+2615041040	JESICA MARITO BR SAGALA
+2615041041	IHKRIMA AZKURI LESTARI
+2615041042	MUHAMAD ZAKI ZIKRULLAH
+2615041043	CLARA FATIHA BILQIZ
+2615041044	ALFI LARISA
+2615041045	ANGELLINA DWI ARYANI
+2615041046	CAHYANI ILMI
+2615041047	DWI ANGGI SUCIATI
+2615041048	EKAPUTRI RAMADANI
+2615041049	GHINAA NAURAH AUFAA
+2615041050	INDAH PERMATA SARI
+2615041051	MUHAMMAD AZZAM FAHREZY
+2615041052	NADYA SALSABILA
+2615041053	OLIVIA VANDINI PUTRI
+2615041054	SAFIRA NUR ANISA
+2615041055	SYIFA ALFIA NURAINI
+2615041056	TISYA DWIANTI RAMADHANI
+2615041057	CHIKAL RAHMADANI PUTRY
+2615041058	ENDITA MAHARANI
+2615041059	GISELDA SAKINAH RAMADANI
+2615041060	ISNAINI ALIZA PUTRI
+2615041061	AHMAD SYAIFUDIN
+2615041062	DECA APRILIANA
+2615041063	FATIMAH MAYSITOH SALINI
+2615041064	JALIN PRASTYO
+2615041065	J. NOVITA SARI MANALU
+2615041066	MITA PRATIWI
+2615041067	WISNU MAYA CITTA
+2615041068	ARLITA SETIAWATI
+2615041069	CLARA ABELIA
+2615041070	ESRA JOREMIA GINTING
+2615041071	MARYANA CECILIA SITORUS
+2615041072	SUKMA NOVIDA SARI
+2615041073	AHMAD MAULANA RAMDHANI
+2615041074	INDRA AZIZULIANSYAH
+2615041075	NAIMA ARA JULIETTA
+2615041076	QUEENA NAILA ADILA ZAHRA
+2615041077	REYKI ASSALAMU ARYEKA
+2615041078	SALWA AUFARA
+2615041079	AHMAD TAUFIQURAHMAN
+2615041080	RAISA NOOR KAMILA
+2615041081	ROSSA VIRGINIA PURWASIH
+2615041082	ANNISA WAHDANIA ALHUDA
+2615041083	CAYSIA UKHTI SALSA AFRILYA. S
+2615041084	ERIKA KHANSA FAKHIRAH
+2615041085	LULU ARSI
+2615041086	NI NYOMAN VIRLA APRILIA
+2615041087	PUTRI NAUFA RAMADHANI
+2615041088	DINI JESIKA TINDAON
+2615041089	MUHAMMAD AFGAN SADEWA
+2615041090	ABID GHAZA ARYORI
+2615041091	DELPI AZZAHARA
+2615041092	MUHAMMAD AMRI WIRYAWAN
+2615041093	MUNAFIAH
+2615041094	NIKE ALYADILA
+2615041095	TITA AMELIA
+2615041096	AZ-ZAHRA RADITYA PUTRI
+2615041097	ALZHELFA KHAIRUNISA
+2615041098	NADYA SHAFWAH SALSABILA
+2615041099	MADE DINDA SINTA DEWI
+2615041101	JIHAD AZZAHRAAN MELCAH
+2615041102	ROULDA CHAEZZA AL FAFA
+2615041103	M. SAGAN AL KHAWARIZMI
+2615041104	MUHAMMAD EBI NASUTION
+2615041105	MUTYA SASKIRA
+2615041106	ASBY ARYA MAHYUZA
+2615041107	BRILLYAN ANGGARA
+2615041108	SITI MARYAM FAUZIAH
+2615041109	AIRIN DONNA ULVAREZA
+2615041110	AUDREY FELICE KAELA SHOVA
+2615041111	MHD. FADEL NAZMI
+2615041112	NAZRUL ILHAM
+2615041113	KEISYA SUCI AGUSTINA
+2615041114	JESSEN WIJAYA
+2615041115	BUMI GATHAN WIRA NUGRAHA
+2615041116	RIZKY JULIANSYAH
+2615041117	ARSYILLA ARISA RAMADHANI
+2615041118	OKANERZA ADENISA WIRANTAKA
+2615041119	AHMAD KHUSNUL BAKTI
+2615041120	MUHAMMAD RIDHO
+2615041121	PUTRI IMARA
+2615041122	TRIO NANDA FEBRIAN
+2615041123	KHITANI SYAKINAH AMANDA
+2615041124	HANI YUNITA
+2615041125	Ahmad Naqib Ishamuddin
+2615041126	Putri fatimah azzahra
+2615041127	SABITA MUTIA AISYIYAH
+2615041128	ANISTA TIRTA WIJAYA
+2615041129	RAIHAN ZULFA PRATAMA`;
+const norm=s=>s.replace(/[\u200b-\u200f\u202a-\u202e\ufeff]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
+const MHS=LIST.split('\n').map(l=>{const [n,...r]=l.split('\t');return{npm:n.trim(),nama:r.join(' ').trim()}});
+const STS=['Hadir','Izin','Sakit','Praktikum','Responsi','Mata Kuliah','Quiz','Sholat','Ishoma'],cl=s=>s.replace(/ /g,'');
+const BLN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const $=id=>document.getElementById(id),p2=n=>String(n).padStart(2,'0');
+let st='Hadir',rows=[],db=null,assets=null,dl=null,uid=null;
+function wib(){const d=new Date(Date.now()+7*36e5);return{date:`${d.getUTCFullYear()}-${p2(d.getUTCMonth()+1)}-${p2(d.getUTCDate())}`,h:d.getUTCHours(),t:`${p2(d.getUTCHours())}:${p2(d.getUTCMinutes())}:${p2(d.getUTCSeconds())}`,d}}
+const open=h=>h>=7&&h<18;
+function tick(){const w=wib(),d=w.d;$('clock').textContent=`${d.getUTCDate()} ${BLN[d.getUTCMonth()]} ${d.getUTCFullYear()} · ${w.t} WIB`;
+$('win').textContent=open(w.h)?'Absen dibuka pukul 07.00–18.00 WIB.':'Di luar jam absen (07.00–18.00 WIB).'}
+setInterval(tick,1000);tick();
+function seg(id,arr,get,set){const e=$(id);e.innerHTML=arr.map(a=>`<button data-v="${a}" class="${a===get()?'on':''}">${a}</button>`).join('');
+e.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;set(b.dataset.v);[...e.children].forEach(c=>c.classList.toggle('on',c===b))}}
+seg('st',STS,()=>st,v=>{st=v;$('bw').style.display=(v==='Izin'||v==='Sakit')?'block':'none'});
+const API='https://script.google.com/macros/s/AKfycbys5d7baaqVOaiKGAQkk1HNaddzY28YQmHz6VDIOh59buLe-vt_fiNaTnkmfV5tfDLt/exec';
+let selfie=null,loc=null,stream=null;
+function upd(){$('vs').textContent=`Foto: ${selfie?'✓':'belum'} · Lokasi: ${loc?'✓ (±'+loc.acc+' m)':'belum'}`}
+$('bc').onclick=async()=>{const v=$('vd');
+ if(!stream){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user'},audio:false});v.srcObject=stream;v.style.display='block';$('sf').style.display='none';$('bc').textContent='Jepret';}catch(e){$('vs').textContent='Kamera tidak bisa dibuka. Izinkan akses kamera lalu coba lagi.'}return}
+ if(!v.videoWidth)return;
+ const c=$('cv'),k=Math.min(1,640/v.videoWidth);c.width=v.videoWidth*k;c.height=v.videoHeight*k;c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+ selfie=c.toDataURL('image/jpeg',.7).split(',')[1];$('sf').src='data:image/jpeg;base64,'+selfie;$('sf').style.display='block';
+ stream.getTracks().forEach(t=>t.stop());stream=null;v.style.display='none';$('bc').textContent='Ulangi foto';upd()};
+$('bl').onclick=()=>{if(!navigator.geolocation){$('vs').textContent='Perangkat tidak mendukung lokasi.';return}
+ $('bl').textContent='Mencari lokasi…';
+ navigator.geolocation.getCurrentPosition(p=>{loc={lat:p.coords.latitude,lng:p.coords.longitude,acc:Math.round(p.coords.accuracy)};$('bl').textContent='Perbarui lokasi';upd()},
+ ()=>{$('bl').textContent='Ambil lokasi';$('vs').textContent='Lokasi gagal. Izinkan akses lokasi dan aktifkan GPS.'},{enableHighAccuracy:true,timeout:15000,maximumAge:0})};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const b64=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result.split(',')[1]);r.onerror=no;r.readAsDataURL(f)});
+$('go').onclick=async()=>{
+const er=$('er');er.textContent='';
+const n=$('fn').value.trim(),m=norm($('fm').value);
+if(!n&&!m){er.textContent='Isi NPM atau nama lengkap.';return}
+let s=null;
+if(n){s=MHS.find(x=>x.npm===n);if(!s){er.textContent='NPM tidak ditemukan.';return}}
+if(m){const f=MHS.find(x=>norm(x.nama)===m);if(!f){er.textContent='Nama tidak ditemukan. Tulis nama lengkap sesuai daftar.';return}
+ if(s&&s.npm!==f.npm){er.textContent='NPM dan nama tidak cocok.';return}s=f}
+if(!open(wib().h)){er.textContent='Absen hanya dibuka pukul 07.00–18.00 WIB.';return}
+if(!selfie||!loc){er.textContent='Ambil foto dan lokasi terlebih dahulu.';return}
+if(API.startsWith('GANTI')){er.textContent='URL penyimpanan belum diatur di file ini.';return}
+const file=$('bf').files[0],al=$('al').value.trim(),iz=(st==='Izin'||st==='Sakit');
+if(iz&&!al){er.textContent='Tulis alasan/keterangan untuk izin atau sakit.';return}
+if(iz&&file&&file.size>10*1024*1024){er.textContent='Ukuran bukti maksimal 10 MB.';return}
+const btn=$('go');btn.disabled=true;btn.textContent='Menyimpan…';
+try{
+ const body={npm:s.npm,nama:s.nama,status:st,alasan:iz?al:'',selfie:selfie,lat:loc.lat,lng:loc.lng,acc:loc.acc};
+ if(iz&&file){body.fileName=file.name;body.mime=file.type;body.data=await b64(file)}
+ const r=await fetch(API,{method:'POST',body:JSON.stringify(body)}),j=await r.json();
+ if(!j.ok)throw new Error(j.error||'ditolak');
+ const x=$('res');x.style.display='block';
+ x.innerHTML=`<div class="ck">✓</div><b>${esc(s.nama)}</b><div>${s.npm}</div><div><span class="bd ${cl(st)}">${st}</span></div><div>${j.tanggal} · ${j.waktu} WIB · slot ${j.jam}.00</div>`;
+ $('fn').value='';$('fm').value='';$('bf').value='';$('al').value='';
+ selfie=null;loc=null;$('sf').style.display='none';$('bc').textContent='Ambil foto';$('bl').textContent='Ambil lokasi';upd();
+}catch(e){er.textContent='Gagal menyimpan: '+(e.message||'coba lagi')}
+btn.disabled=false;btn.textContent='Kirim kehadiran'};
+</script></body></html>
